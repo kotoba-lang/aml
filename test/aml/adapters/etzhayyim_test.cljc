@@ -39,3 +39,19 @@
     (is (every? :aml/non-adjudicating (:aml/results out)))
     (is (= ["etzhayyim/yabai" "etzhayyim/malak"]
            (mapv :aml/asserter (:aml/results out))))))
+
+(deftest an-upstream-error-response-fails-closed-not-clear
+  (let [failing-client (reify a/IXrpcClient
+                          (invoke! [_ _nsid _payload]
+                            {:error :http/status :status 503 :body "service unavailable"}))
+        port (a/screening-port failing-client)
+        req (m/request "case-err" {:subject/id "did:web:example.com:mallory"}
+                       {:case-ref "case-err" :purpose "onboarding" :routes [:yabai :malak]})
+        out (c/screen port req)]
+    (is (not= :clear (:aml/status out))
+        "an unreachable/erroring risk-scoring vendor must never be silently reported as clear")
+    (is (= :review (:aml/status out)))
+    (is (every? #(= :review %) (mapv :aml/level (:aml/results out)))
+        "no recognizable severity/score signal in the response must fail closed to :review,
+         never fall through to :clear -- an AML clearance requires a positive observed
+         signal, not merely the absence of one")))
