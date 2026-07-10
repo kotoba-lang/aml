@@ -34,12 +34,22 @@
     (pos? score) :monitor
     :else :clear))
 
-(defn- response-level [response]
+(defn- response-level
+  "Map a screening response to an aml.model level. Falls back to :review
+  (never :clear) when the response carries no recognizable severity/score
+  signal -- this is the case for an upstream error map (e.g.
+  {:error :http/status :status 503 :body ...}, what xrpc-http/retry return
+  when the risk-scoring vendor is unreachable or every retry is exhausted),
+  and :clear must never be the default for 'we don't actually know': an
+  AML/sanctions clearance requires a positive observed signal, not merely
+  the absence of one. Silently clearing a subject because the vendor API
+  errored out was a confirmed fail-open bug this closes."
+  [response]
   (or (severity->level (:severity response))
       (severity->level (:risk/severity response))
       (score->level (:score response))
       (score->level (:risk/score response))
-      :clear))
+      :review))
 
 (defn- response-score [response]
   (or (:score response) (:risk/score response)))
