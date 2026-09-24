@@ -3,7 +3,7 @@
             [aml.adapters.xrpc-http :as xrpc]
             [aml.core :as c]
             [aml.model :as m]
-            [clojure.edn :as edn]
+            [kotoba.lang.edn :as edn]
             [kotoba.test :refer [deftest is]])
   (:import [com.sun.net.httpserver HttpHandler HttpServer]
            [java.net InetSocketAddress]))
