@@ -1,5 +1,5 @@
 (ns aml.adapters.xrpc-http-test
-  (:require [aml.adapters.etzhayyim]
+  (:require [kotoba.bytes :as kbytes] [aml.adapters.etzhayyim]
             [aml.adapters.xrpc-http :as xrpc]
             [aml.core :as c]
             [aml.model :as m]
@@ -9,7 +9,7 @@
            [java.net InetSocketAddress]))
 
 (defn- respond! [exchange status body]
-  (let [bytes (.getBytes body "UTF-8")]
+  (let [bytes (kbytes/utf8-bytes body)]
     (.sendResponseHeaders exchange status (alength bytes))
     (with-open [out (.getResponseBody exchange)]
       (.write out bytes))))
