@@ -1,7 +1,7 @@
 (ns aml.adapters.auth-client-test
   (:require [aml.adapters.auth-client :as auth-client]
             [aml.adapters.etzhayyim :as etzhayyim]
-            [clojure.test :refer [deftest is]]))
+            [kotoba.test :refer [deftest is]]))
 
 (deftest adds-bearer-token-header-through-payload-metadata
   (let [calls (atom [])

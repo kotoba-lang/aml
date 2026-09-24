@@ -1,7 +1,7 @@
 (ns aml.adapters.evidence-ledger-test
   (:require [aml.adapters.evidence-ledger :as evidence-ledger]
             [aml.model :as m]
-            [clojure.test :refer [deftest is]]
+            [kotoba.test :refer [deftest is]]
             [identity.adapters.ledger :as ledger]))
 
 (defn- recording-ledger [txs]
