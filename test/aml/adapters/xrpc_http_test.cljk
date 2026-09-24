@@ -4,7 +4,7 @@
             [aml.core :as c]
             [aml.model :as m]
             [clojure.edn :as edn]
-            [clojure.test :refer [deftest is]])
+            [kotoba.test :refer [deftest is]])
   (:import [com.sun.net.httpserver HttpHandler HttpServer]
            [java.net InetSocketAddress]))
 

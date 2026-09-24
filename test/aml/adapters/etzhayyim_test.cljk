@@ -2,7 +2,7 @@
   (:require [aml.adapters.etzhayyim :as a]
             [aml.core :as c]
             [aml.model :as m]
-            [clojure.test :refer [deftest is]]))
+            [kotoba.test :refer [deftest is]]))
 
 (deftest routes-aml-screening-to-etzhayyim-xrpc
   (let [calls (atom [])
